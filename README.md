@@ -19,6 +19,26 @@ Not tied to any single industry — any organization with equipment, furniture, 
 
 ---
 
+## 📸 Screenshots
+
+| Login | Dashboard |
+|---|---|
+| ![Login](./screenshots/01_login.png) | ![Dashboard](./screenshots/02_dashboard.png) |
+
+| Double-Allocation Block | Booking Conflict |
+|---|---|
+| ![Double-Allocation Block](./screenshots/03_allocation_block.png) | ![Booking Conflict](./screenshots/04_booking_conflict.png) |
+
+| Booking Success | Maintenance Workflow |
+|---|---|
+| ![Booking Success](./screenshots/05_booking_success.png) | ![Maintenance](./screenshots/06_maintenance.png) |
+
+**Audit Cycle:**
+
+![Audit](./screenshots/07_audit.png)
+
+---
+
 ## 🧱 Architecture
 
 The repo is split into two independent apps — no shared build tooling, so each can be run and deployed on its own.
