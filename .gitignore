@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+**/node_modules/
+jspm_packages/
+web_modules/
+
+# Production builds
+dist/
+**/dist/
+build/
+**/build/
+out/
+.next/
+
+# Logs and databases
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+.system_generated/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environments and Secrets
+.env
+.env.local
+.env.production
+.env.development
+.env.*.local
+
+# Database JSON (Explicitly allow backend db.json to preserve seed/demo states)
+!backend/db.json

@@ -1,0 +1,380 @@
+import { Asset, Department, Booking, MaintenanceTicket, NotificationLog, UserProfile, Allocation, TransferRequest, Employee, AuditCycle } from '../models/types';
+
+export const DEFAULT_USER: UserProfile = {
+  name: 'Jaydev Prajapati',
+  email: 'jaydevprajapati1110@gmail.com',
+  role: 'Enterprise Administrator',
+  avatarUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAD5m25eAev4ZJPWDBvjApISv16W1RfYw0rWSwdElf1gpL3S-cg5JZyRpU1pfzhXMEUXCRMB5z3TQb_kTiLCFHSNUf78lFOot4zdYUnqXw5PJjZwSUFfjQBcawrMv5ZAE5taHANl_4qFoWFbwZvS12TPyAWvHdDUi_fiEsQ6RcB1XLcoMBA_mc3EaOlqiLqMMb91ioQhjRf2gEhZ24Vyt4Zz4u3mnHUs1s-vXdluX5fG7d2Vc84HVlj-A'
+};
+
+export const INITIAL_DEPARTMENTS: Department[] = [
+  {
+    id: 'DEPT-001',
+    name: 'Software Engineering',
+    head: 'Sarah Jenkins',
+    parentDept: 'Technology Division',
+    assetsCount: 452,
+    status: 'Active',
+    icon: 'developer_board'
+  },
+  {
+    id: 'DEPT-002',
+    name: 'UI/UX Design',
+    head: 'Michael Chen',
+    parentDept: 'Technology Division',
+    assetsCount: 128,
+    status: 'Active',
+    icon: 'palette'
+  },
+  {
+    id: 'DEPT-003',
+    name: 'Content Marketing',
+    head: 'Elena Rodriguez',
+    parentDept: 'Growth & Sales',
+    assetsCount: 34,
+    status: 'Inactive',
+    icon: 'history_edu'
+  },
+  {
+    id: 'DEPT-004',
+    name: 'Data Security',
+    head: 'David Vance',
+    parentDept: 'Technology Division',
+    assetsCount: 89,
+    status: 'Active',
+    icon: 'security'
+  },
+  {
+    id: 'DEPT-005',
+    name: 'Quality Assurance',
+    head: 'James Wilson',
+    parentDept: 'Technology Division',
+    assetsCount: 65,
+    status: 'Active',
+    icon: 'fact_check'
+  },
+  {
+    id: 'DEPT-006',
+    name: 'Finance & Accounts',
+    head: 'Robert Taylor',
+    parentDept: 'Corporate Operations',
+    assetsCount: 41,
+    status: 'Active',
+    icon: 'payments'
+  }
+];
+
+export const INITIAL_ASSETS: Asset[] = [
+  {
+    tag: '#AST-4092',
+    name: 'MacBook Pro 16" - M2 Max',
+    category: 'IT Equipment',
+    status: 'Available',
+    location: 'Main Office - Floor 4',
+    icon: 'laptop_mac',
+    serialNumber: 'C02DW992MD6M',
+    acquisitionDate: '2023-10-12',
+    acquisitionCost: 3299.00,
+    condition: 'New',
+    isShared: true,
+    isBookable: true,
+    owner: 'Sarah Jenkins',
+    department: 'Software Engineering',
+    imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuARZ6LwkGPe9EDh70BNRX4fZZRKkcJXXclQOr2Z4AKZeNdrwUWtOXt2wUOsNe9EKlaxMEh7Y4ldTcr8SdHigIhkHnWB4redEYShMM4y0KbrE3c7pf6qOcAOx5kJi95pG_YMVTz4jho00VRzwOYbMIxtkwFjZzg2MwbjfZHh8DeJ3ux6eMG10PWozOXpU7ggoyQ0jq9cUm0YxRMpBrtPaUUlunnt80X8W4oHaIGKJ4omDUcyoYSylcevtA'
+  },
+  {
+    tag: '#AST-5100',
+    name: 'Industrial Laser Printer X-1',
+    category: 'Hardware',
+    status: 'Maintenance',
+    location: 'Logistics Center',
+    icon: 'print',
+    serialNumber: 'PR-99201-LP',
+    acquisitionDate: '2022-04-18',
+    acquisitionCost: 1450.00,
+    condition: 'Good',
+    isShared: true,
+    isBookable: false,
+    owner: 'Warehouse A',
+    department: 'Logistics'
+  },
+  {
+    tag: '#AST-2023',
+    name: 'Ergonomic Task Chair - Aero',
+    category: 'Furniture',
+    status: 'In Use',
+    location: 'Creative Studio',
+    icon: 'chair',
+    serialNumber: 'FUR-88210-CH',
+    acquisitionDate: '2021-08-05',
+    acquisitionCost: 850.00,
+    condition: 'Good',
+    isShared: false,
+    isBookable: false,
+    owner: 'Liam Thorne',
+    department: 'UI/UX Design'
+  },
+  {
+    tag: '#AST-8821',
+    name: 'Digital SLR Sony Alpha',
+    category: 'Media',
+    status: 'Available',
+    location: 'Marketing Lab',
+    icon: 'camera',
+    serialNumber: 'CAM-88312-SN',
+    acquisitionDate: '2023-01-20',
+    acquisitionCost: 1999.00,
+    condition: 'New',
+    isShared: true,
+    isBookable: true,
+    owner: 'Marketing Team',
+    department: 'Content Marketing'
+  },
+  {
+    tag: '#AST-1092',
+    name: 'Dell XPS 15 - Intel i9',
+    category: 'IT Equipment',
+    status: 'Allocated',
+    location: 'Satellite Branch 4',
+    icon: 'laptop_windows',
+    serialNumber: 'SN-XPS15-992',
+    acquisitionDate: '2022-11-02',
+    acquisitionCost: 2450.00,
+    condition: 'Good',
+    isShared: true,
+    isBookable: false,
+    owner: 'Marcus Chen',
+    department: 'Software Engineering'
+  },
+  {
+    tag: '#AST-3042',
+    name: 'Polycom Studio X50 Video Bar',
+    category: 'Media',
+    status: 'Missing',
+    location: 'Meeting Room 402',
+    icon: 'videocam',
+    serialNumber: 'AV-X50-9901',
+    acquisitionDate: '2022-09-14',
+    acquisitionCost: 1800.00,
+    condition: 'Good',
+    isShared: true,
+    isBookable: true,
+    owner: 'IT Ops',
+    department: 'Technology Division'
+  },
+  {
+    tag: '#AST-2342',
+    name: 'LG 65" OLED Display Monitor',
+    category: 'Hardware',
+    status: 'Damaged',
+    location: 'Lounge Area',
+    icon: 'tv',
+    serialNumber: 'TV-LG65-2342',
+    acquisitionDate: '2021-02-10',
+    acquisitionCost: 1200.00,
+    condition: 'Poor',
+    isShared: true,
+    isBookable: false,
+    owner: 'Facility Ops',
+    department: 'Corporate Operations'
+  }
+];
+
+export const INITIAL_BOOKINGS: Booking[] = [
+  {
+    id: 'book-1',
+    title: 'Executive Review',
+    timeFrom: '09:30',
+    timeTo: '11:00',
+    date: '2023-10-24',
+    teamName: 'Leadership Team',
+    isLocked: true,
+    resource: 'Boardroom Delta'
+  },
+  {
+    id: 'book-2',
+    title: 'Project Delta Sync',
+    timeFrom: '11:30',
+    timeTo: '12:30',
+    date: '2023-10-24',
+    teamName: 'Delta Project Core',
+    resource: 'Boardroom Delta'
+  },
+  {
+    id: 'book-3',
+    title: 'Quarterly Asset Audit',
+    timeFrom: '14:00',
+    timeTo: '16:30',
+    date: '2023-10-24',
+    teamName: 'Internal Logistics Team',
+    isLocked: true,
+    resource: 'Boardroom Delta'
+  }
+];
+
+export const INITIAL_MAINTENANCE: MaintenanceTicket[] = [
+  {
+    id: 'SR-9042',
+    assetTag: '#AST-5100',
+    title: 'HVAC Unit Failure',
+    description: 'System reporting excessive noise and reduced cooling in Wing B.',
+    status: 'PENDING',
+    timeAgo: '2h ago',
+    details: 'Facility thermostat logs show erratic fluctuations. Overheating alert tripped twice.'
+  },
+  {
+    id: 'LP-2211',
+    assetTag: '#AST-1092',
+    title: 'Router Latency',
+    description: 'IT equipment room 402 - frequent packet loss reported by floor staff.',
+    status: 'PENDING',
+    timeAgo: '5h ago',
+    details: 'Primary gateway failing to resolve DNS requests under heavy load. Firmware update suggested.'
+  },
+  {
+    id: 'EV-3301',
+    assetTag: '#AST-4092',
+    title: 'Charging Station Maintenance',
+    description: 'Level 2 charger in South Parking requires firmware update and plug replacement.',
+    status: 'APPROVED',
+    timeAgo: '1d ago',
+    details: 'Port #3 connector pin is bent, preventing communication handshake. Approved for onsite repair.'
+  },
+  {
+    id: 'PR-012',
+    assetTag: '#AST-5100',
+    title: 'Industrial Printer Calibration',
+    description: 'Alignment issues on large format plotter in design studio.',
+    status: 'TECHNICIAN_ASSIGNED',
+    technicianName: 'Marcus Chen',
+    eta: '1h',
+    timeAgo: '1d ago',
+    details: 'Cyan printhead offset by 1.2mm. Needs mechanical alignment check.'
+  },
+  {
+    id: 'EL-552',
+    assetTag: '#AST-2342',
+    title: 'Freight Elevator Sensor',
+    description: 'Sensor reporting safety gate misalignment, preventing elevator door closure.',
+    status: 'IN_PROGRESS',
+    technicianName: 'Sarah Jenkins',
+    eta: 'Active Now',
+    timeAgo: '4h ago',
+    details: 'Testing magnetic contact integrity on Floor 3.'
+  }
+];
+
+export const INITIAL_NOTIFICATIONS: NotificationLog[] = [
+  {
+    id: 'notif-1',
+    type: 'alert',
+    title: 'Critical Alert: Temperature exceeded',
+    description: 'Server Rack A-12 temperature exceeded safety threshold (42°C).',
+    isRead: false,
+    timeAgo: '2m ago',
+    category: 'Infrastructure'
+  },
+  {
+    id: 'notif-2',
+    type: 'booking',
+    title: 'New Booking Request',
+    description: 'Alex Rivera requested Conference Room Delta for Strategic Planning.',
+    isRead: false,
+    timeAgo: '15m ago',
+    category: 'Resource Booking',
+    hasActions: true,
+    targetId: 'book-2'
+  },
+  {
+    id: 'notif-3',
+    type: 'transfer',
+    title: 'Asset Transfer Completed',
+    description: 'Asset #MB-2024-X1 (MacBook Pro) has been successfully transferred to Design Team.',
+    isRead: false,
+    timeAgo: '45m ago',
+    category: 'Asset Management'
+  },
+  {
+    id: 'notif-4',
+    type: 'maintenance',
+    title: 'Maintenance Check Completed',
+    description: 'Maintenance check for Generator B-4 completed by technician Samuel K.',
+    isRead: true,
+    timeAgo: '2h ago',
+    category: 'Maintenance'
+  },
+  {
+    id: 'notif-5',
+    type: 'audit',
+    title: 'Audit Update',
+    description: 'Monthly asset reconciliation for London Branch is 85% complete.',
+    isRead: false,
+    timeAgo: '4h ago',
+    category: 'Audit'
+  },
+  {
+    id: 'notif-6',
+    type: 'security',
+    title: 'Access Denied',
+    description: 'Unauthorized login attempt detected from IP 192.168.1.105.',
+    isRead: false,
+    timeAgo: 'Yesterday',
+    category: 'Security'
+  },
+  {
+    id: 'notif-7',
+    type: 'reports',
+    title: 'Document Assignment',
+    description: 'Sarah Jenkins assigned you to review Q3 Procurement Report.',
+    isRead: false,
+    timeAgo: 'Yesterday',
+    category: 'Reports'
+  }
+];
+
+// Backend-specific seeds
+export const INITIAL_ALLOCATIONS: Allocation[] = [
+  {
+    id: 'alloc-1',
+    assetTag: '#AST-1092',
+    employeeName: 'Marcus Chen',
+    department: 'Software Engineering',
+    allocatedDate: '2022-11-02',
+    expectedReturnDate: '2023-11-02',
+    status: 'Active'
+  }
+];
+
+export const INITIAL_TRANSFERS: TransferRequest[] = [];
+
+export const INITIAL_AUDIT_CYCLES: AuditCycle[] = [
+  {
+    id: 'audit-1',
+    scope: 'Software Engineering',
+    startDate: '2023-10-01',
+    endDate: '2023-10-31',
+    auditors: ['Sarah Jenkins', 'Jaydev Prajapati'],
+    status: 'Open',
+    verifications: []
+  }
+];
+
+export const INITIAL_EMPLOYEES: Employee[] = [
+  { id: 'EMP-001', name: 'Sarah Jenkins', email: 'sarah.j@assetflow.com', role: 'Department Head', department: 'Software Engineering' },
+  { id: 'EMP-002', name: 'Michael Chen', email: 'michael.c@assetflow.com', role: 'Department Head', department: 'UI/UX Design' },
+  { id: 'EMP-003', name: 'Elena Rodriguez', email: 'elena.r@assetflow.com', role: 'Department Head', department: 'Content Marketing' },
+  { id: 'EMP-004', name: 'David Vance', email: 'david.v@assetflow.com', role: 'Department Head', department: 'Data Security' },
+  { id: 'EMP-005', name: 'James Wilson', email: 'james.w@assetflow.com', role: 'Department Head', department: 'Quality Assurance' },
+  { id: 'EMP-006', name: 'Robert Taylor', email: 'robert.t@assetflow.com', role: 'Department Head', department: 'Finance & Accounts' },
+  { id: 'EMP-007', name: 'Marcus Chen', email: 'marcus.c@assetflow.com', role: 'Employee', department: 'Software Engineering' },
+  { id: 'EMP-008', name: 'Liam Thorne', email: 'liam.t@assetflow.com', role: 'Employee', department: 'UI/UX Design' },
+  { id: 'EMP-009', name: 'Alex Rivera', email: 'alex.r@assetflow.com', role: 'Employee', department: 'Software Engineering' },
+  { id: 'EMP-010', name: 'Jaydev Prajapati', email: 'jaydevprajapati1110@gmail.com', role: 'Enterprise Administrator', department: 'Technology Division' }
+];
+
+export const INITIAL_CATEGORIES: string[] = [
+  'IT Equipment',
+  'Hardware',
+  'Furniture',
+  'Media'
+];

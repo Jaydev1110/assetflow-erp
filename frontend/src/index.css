@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  
+  --color-brand-surface: #F9FAFB;
+  --color-brand-surface-dim: #F3F4F6;
+  --color-brand-surface-bright: #FFFFFF;
+  --color-brand-lowest: #FFFFFF;
+  --color-brand-low: #F3F4F6;
+  --color-brand-container: #FFFFFF;
+  --color-brand-high: #E5E7EB;
+  --color-brand-highest: #D1D5DB;
+  --color-brand-text: #111827;
+  --color-brand-text-variant: #6B7280;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-brand-surface);
+    color: var(--color-brand-text);
+  }
+}
+
+/* Material symbols utility styling */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Scrollbar customizations */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #e5e2e3;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c6c6cd;
+}
+
+/* Timeline grid pattern background */
+.timeline-grid {
+  background-image: linear-gradient(to bottom, #eae7e9 1px, transparent 1px);
+  background-size: 100% 64px; /* Matches the 1-hour slot height */
+}
