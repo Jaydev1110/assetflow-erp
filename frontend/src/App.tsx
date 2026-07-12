@@ -30,6 +30,7 @@ import NotificationsView from './components/NotificationsView';
 import ProfileView from './components/ProfileView';
 import SettingsView from './components/SettingsView';
 import LoginView from './components/LoginView';
+import { apiUrl } from './config/api';
 
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -71,11 +72,11 @@ export default function App() {
     const initData = async () => {
       try {
         const [assetsRes, deptsRes, bookingsRes, maintRes, notifRes] = await Promise.all([
-          fetch('http://localhost:5000/api/assets'),
-          fetch('http://localhost:5000/api/departments'),
-          fetch('http://localhost:5000/api/bookings'),
-          fetch('http://localhost:5000/api/maintenance'),
-          fetch('http://localhost:5000/api/notifications')
+          fetch(apiUrl('/api/assets')),
+          fetch(apiUrl('/api/departments')),
+          fetch(apiUrl('/api/bookings')),
+          fetch(apiUrl('/api/maintenance')),
+          fetch(apiUrl('/api/notifications'))
         ]);
 
         if (assetsRes.ok) setAssets(await assetsRes.json());
@@ -113,7 +114,7 @@ export default function App() {
   // 1. Add Asset & increment associated department assets count via API
   const handleAddAsset = async (asset: Asset) => {
     try {
-      const res = await fetch('http://localhost:5000/api/assets', {
+      const res = await fetch(apiUrl('/api/assets'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(asset)
@@ -124,8 +125,8 @@ export default function App() {
 
         // Refresh departments & notifications to sync counters/logs
         const [deptsRes, notifRes] = await Promise.all([
-          fetch('http://localhost:5000/api/departments'),
-          fetch('http://localhost:5000/api/notifications')
+          fetch(apiUrl('/api/departments')),
+          fetch(apiUrl('/api/notifications'))
         ]);
         if (deptsRes.ok) setDepartments(await deptsRes.json());
         if (notifRes.ok) setNotifications(await notifRes.json());
@@ -138,7 +139,7 @@ export default function App() {
   // 2. Add Department Cost Center via API
   const handleAddDepartment = async (dept: Omit<Department, 'assetsCount'>) => {
     try {
-      const res = await fetch('http://localhost:5000/api/departments', {
+      const res = await fetch(apiUrl('/api/departments'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dept)
@@ -148,7 +149,7 @@ export default function App() {
         setDepartments((prev) => [...prev, newDept]);
 
         // Refresh notifications
-        const notifRes = await fetch('http://localhost:5000/api/notifications');
+        const notifRes = await fetch(apiUrl('/api/notifications'));
         if (notifRes.ok) setNotifications(await notifRes.json());
       }
     } catch (err) {
@@ -166,7 +167,7 @@ export default function App() {
     try {
       if (isCurrentlyAllocated) {
         // Submit transfer request (Requested status)
-        const res = await fetch('http://localhost:5000/api/transfers', {
+        const res = await fetch(apiUrl('/api/transfers'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -179,7 +180,7 @@ export default function App() {
 
         if (res.ok) {
           // Reload notifications
-          const notifRes = await fetch('http://localhost:5000/api/notifications');
+          const notifRes = await fetch(apiUrl('/api/notifications'));
           if (notifRes.ok) setNotifications(await notifRes.json());
           alert(`Transfer request submitted successfully (status: Requested).`);
           return { success: true };
@@ -190,7 +191,7 @@ export default function App() {
         }
       } else {
         // Allocate available asset directly
-        const res = await fetch('http://localhost:5000/api/allocations', {
+        const res = await fetch(apiUrl('/api/allocations'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -204,8 +205,8 @@ export default function App() {
           const newAlloc = await res.json();
           // Reload assets & notifications (since status was changed to Allocated)
           const [assetsRes, notifRes] = await Promise.all([
-            fetch('http://localhost:5000/api/assets'),
-            fetch('http://localhost:5000/api/notifications')
+            fetch(apiUrl('/api/assets')),
+            fetch(apiUrl('/api/notifications'))
           ]);
           if (assetsRes.ok) setAssets(await assetsRes.json());
           if (notifRes.ok) setNotifications(await notifRes.json());
@@ -229,7 +230,7 @@ export default function App() {
   // 4. File Maintenance repair requests via API (syncs asset status to Maintenance)
   const handleAddTicket = async (ticket: MaintenanceTicket) => {
     try {
-      const res = await fetch('http://localhost:5000/api/maintenance', {
+      const res = await fetch(apiUrl('/api/maintenance'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -246,8 +247,8 @@ export default function App() {
 
         // Reload assets and notifications (due to status sync)
         const [assetsRes, notifRes] = await Promise.all([
-          fetch('http://localhost:5000/api/assets'),
-          fetch('http://localhost:5000/api/notifications')
+          fetch(apiUrl('/api/assets')),
+          fetch(apiUrl('/api/notifications'))
         ]);
         if (assetsRes.ok) setAssets(await assetsRes.json());
         if (notifRes.ok) setNotifications(await notifRes.json());
@@ -260,7 +261,7 @@ export default function App() {
   // 5. Progress repair task lifecycle via API
   const handleUpdateTicketStatus = async (id: string, newStatus: MaintenanceTicket['status'], technician?: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/maintenance/${id}/status`, {
+      const res = await fetch(apiUrl(`/api/maintenance/${id}/status`), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -276,8 +277,8 @@ export default function App() {
 
         // Reload assets and notifications in case of status-sync changes
         const [assetsRes, notifRes] = await Promise.all([
-          fetch('http://localhost:5000/api/assets'),
-          fetch('http://localhost:5000/api/notifications')
+          fetch(apiUrl('/api/assets')),
+          fetch(apiUrl('/api/notifications'))
         ]);
         if (assetsRes.ok) setAssets(await assetsRes.json());
         if (notifRes.ok) setNotifications(await notifRes.json());
@@ -290,7 +291,7 @@ export default function App() {
   // 6. Complete repair order and return asset to standard service via API
   const handleResolveTicket = async (id: string, assetTag: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/maintenance/${id}/status`, {
+      const res = await fetch(apiUrl(`/api/maintenance/${id}/status`), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -302,8 +303,8 @@ export default function App() {
 
         // Reload assets & notifications (syncs asset status to Available)
         const [assetsRes, notifRes] = await Promise.all([
-          fetch('http://localhost:5000/api/assets'),
-          fetch('http://localhost:5000/api/notifications')
+          fetch(apiUrl('/api/assets')),
+          fetch(apiUrl('/api/notifications'))
         ]);
         if (assetsRes.ok) setAssets(await assetsRes.json());
         if (notifRes.ok) setNotifications(await notifRes.json());
@@ -316,7 +317,7 @@ export default function App() {
   // 7. Secure Boardroom/Space booking slot via API (enforces overlaps)
   const handleAddBooking = async (booking: Booking) => {
     try {
-      const res = await fetch('http://localhost:5000/api/bookings', {
+      const res = await fetch(apiUrl('/api/bookings'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(booking)
@@ -327,7 +328,7 @@ export default function App() {
         setBookings((prev) => [newBooking, ...prev]);
 
         // Reload notifications
-        const notifRes = await fetch('http://localhost:5000/api/notifications');
+        const notifRes = await fetch(apiUrl('/api/notifications'));
         if (notifRes.ok) setNotifications(await notifRes.json());
         return { success: true };
       } else if (res.status === 409) {
@@ -350,14 +351,14 @@ export default function App() {
   // 8. Revoke meeting room booking reservation via API
   const handleRemoveBooking = async (id: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/bookings/${id}/cancel`, {
+      const res = await fetch(apiUrl(`/api/bookings/${id}/cancel`), {
         method: 'PATCH'
       });
       if (res.ok) {
         setBookings((prev) => prev.filter((b) => b.id !== id));
 
         // Reload notifications
-        const notifRes = await fetch('http://localhost:5000/api/notifications');
+        const notifRes = await fetch(apiUrl('/api/notifications'));
         if (notifRes.ok) setNotifications(await notifRes.json());
       }
     } catch (err) {
@@ -369,7 +370,7 @@ export default function App() {
   const handleReconcileAsset = async (tag: string, status: AssetStatus, condition: Asset['condition']) => {
     try {
       // Find active audit cycle
-      const cyclesRes = await fetch('http://localhost:5000/api/audits');
+      const cyclesRes = await fetch(apiUrl('/api/audits'));
       let cycleId = 'audit-1';
       if (cyclesRes.ok) {
         const cycles = await cyclesRes.json();
@@ -377,7 +378,7 @@ export default function App() {
         if (openCycle) cycleId = openCycle.id;
       }
 
-      const res = await fetch(`http://localhost:5000/api/audits/${cycleId}/verify`, {
+      const res = await fetch(apiUrl(`/api/audits/${cycleId}/verify`), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -391,8 +392,8 @@ export default function App() {
       if (res.ok) {
         // Reload assets & notifications
         const [assetsRes, notifRes] = await Promise.all([
-          fetch('http://localhost:5000/api/assets'),
-          fetch('http://localhost:5000/api/notifications')
+          fetch(apiUrl('/api/assets')),
+          fetch(apiUrl('/api/notifications'))
         ]);
         if (assetsRes.ok) setAssets(await assetsRes.json());
         if (notifRes.ok) setNotifications(await notifRes.json());
@@ -405,7 +406,7 @@ export default function App() {
   // 10. Mark single alert notification as read via API
   const handleMarkRead = async (id: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/notifications/${id}/read`, {
+      const res = await fetch(apiUrl(`/api/notifications/${id}/read`), {
         method: 'PATCH'
       });
       if (res.ok) {
@@ -421,7 +422,7 @@ export default function App() {
   // 11. Mark all notifications as read via API
   const handleMarkAllRead = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/notifications/read-all', {
+      const res = await fetch(apiUrl('/api/notifications/read-all'), {
         method: 'PATCH'
       });
       if (res.ok) {
@@ -437,15 +438,15 @@ export default function App() {
     try {
       if (type === 'transfer' && targetId) {
         // Hit PATCH /api/transfers/:id/approve
-        const res = await fetch(`http://localhost:5000/api/transfers/${targetId}/approve`, {
+        const res = await fetch(apiUrl(`/api/transfers/${targetId}/approve`), {
           method: 'PATCH'
         });
         if (res.ok) {
           await handleMarkRead(id);
           // Reload assets and notifications
           const [assetsRes, notifRes] = await Promise.all([
-            fetch('http://localhost:5000/api/assets'),
-            fetch('http://localhost:5000/api/notifications')
+            fetch(apiUrl('/api/assets')),
+            fetch(apiUrl('/api/notifications'))
           ]);
           if (assetsRes.ok) setAssets(await assetsRes.json());
           if (notifRes.ok) setNotifications(await notifRes.json());
@@ -456,7 +457,7 @@ export default function App() {
         }
       } else {
         // Standard room booking approval
-        const res = await fetch('http://localhost:5000/api/bookings', {
+        const res = await fetch(apiUrl('/api/bookings'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -473,7 +474,7 @@ export default function App() {
           await handleMarkRead(id);
 
           // Reload notifications
-          const notifRes = await fetch('http://localhost:5000/api/notifications');
+          const notifRes = await fetch(apiUrl('/api/notifications'));
           if (notifRes.ok) setNotifications(await notifRes.json());
           alert('Meeting Request Confirmed and Reservation secured!');
         } else {
@@ -491,12 +492,12 @@ export default function App() {
     try {
       if (type === 'transfer' && targetId) {
         // Hit PATCH /api/transfers/${targetId}/reject
-        const res = await fetch(`http://localhost:5000/api/transfers/${targetId}/reject`, {
+        const res = await fetch(apiUrl(`/api/transfers/${targetId}/reject`), {
           method: 'PATCH'
         });
         if (res.ok) {
           await handleMarkRead(id);
-          const notifRes = await fetch('http://localhost:5000/api/notifications');
+          const notifRes = await fetch(apiUrl('/api/notifications'));
           if (notifRes.ok) setNotifications(await notifRes.json());
           alert('Asset Transfer Request rejected & request dismissed.');
         } else {
@@ -520,17 +521,17 @@ export default function App() {
   // 15. Reset database via API
   const handleResetData = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/reset', {
+      const res = await fetch(apiUrl('/api/admin/reset'), {
         method: 'POST'
       });
       if (res.ok) {
         // Reload all data arrays from API
         const [assetsRes, deptsRes, bookingsRes, maintRes, notifRes] = await Promise.all([
-          fetch('http://localhost:5000/api/assets'),
-          fetch('http://localhost:5000/api/departments'),
-          fetch('http://localhost:5000/api/bookings'),
-          fetch('http://localhost:5000/api/maintenance'),
-          fetch('http://localhost:5000/api/notifications')
+          fetch(apiUrl('/api/assets')),
+          fetch(apiUrl('/api/departments')),
+          fetch(apiUrl('/api/bookings')),
+          fetch(apiUrl('/api/maintenance')),
+          fetch(apiUrl('/api/notifications'))
         ]);
 
         if (assetsRes.ok) setAssets(await assetsRes.json());

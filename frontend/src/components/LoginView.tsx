@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { UserProfile } from '../types';
+import { apiUrl } from '../config/api';
 
 interface LoginViewProps {
   onLoginSuccess: (user: UserProfile) => void;
@@ -26,7 +27,7 @@ export default function LoginView({ onLoginSuccess }: LoginViewProps) {
     }
 
     try {
-      const endpoint = isRegister ? 'http://localhost:5000/api/auth/signup' : 'http://localhost:5000/api/auth/login';
+      const endpoint = isRegister ? apiUrl('/api/auth/signup') : apiUrl('/api/auth/login');
       const body = isRegister ? { name, email, department: 'Technology Division' } : { email };
       
       const res = await fetch(endpoint, {
@@ -50,7 +51,7 @@ export default function LoginView({ onLoginSuccess }: LoginViewProps) {
 
   const handleQuickBypass = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: 'jaydevprajapati1110@gmail.com' })
