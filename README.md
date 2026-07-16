@@ -2,6 +2,8 @@
 
 AssetFlow is a centralized ERP-style platform for tracking, allocating, and maintaining an organization's physical assets and shared resources — replacing spreadsheets and paper logs with structured lifecycles, conflict-free booking, and real-time visibility into who holds what, where it is, and its condition.
 
+🌐 **Live Demo:** [https://assetflow-erp-nine.vercel.app/](https://assetflow-erp-nine.vercel.app/)
+
 Built for **Odoo Hackathon 2026 — 8-hour build**.
 
 Not tied to any single industry — any organization with equipment, furniture, vehicles, or shared spaces (offices, schools, hospitals, factories) can use it.
